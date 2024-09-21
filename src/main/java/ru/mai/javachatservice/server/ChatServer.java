@@ -56,53 +56,6 @@ public class ChatServer {
         return Collections.emptyList();
     }
 
-//    public synchronized boolean connectToRoom(long clientId, long roomId) {
-//        Optional<ClientInfo> clientInfoOptional = clientRepository.findById(clientId);
-//
-//        if (clientInfoOptional.isPresent()) {
-//            if (roomConnections.containsKey(roomId)) {
-//                Pair<Long, Long> room = roomConnections.get(roomId);
-//
-//                if ((room.getLeft() == null || room.getRight() == null) &&
-//                        !((room.getLeft() != null && room.getLeft() == clientId) || (room.getRight() != null && room.getRight() == clientId))) {
-//                    Long anotherClientId = room.getLeft() == null ? room.getRight() : room.getLeft();
-//                    roomConnections.put(roomId, Pair.of(clientId, anotherClientId));
-//
-//                    ClientInfo updateClient = clientRepository.addRoom(clientId, roomId);
-//
-//                    if (updateClient == null) {
-//                        return false;
-//                    }
-//
-//                    return startRoom(clientId, anotherClientId, roomId);
-//                }
-//
-//                return false;
-//            } else {
-//                if (!roomRepository.existsRoomInfoByRoomId(roomId)) {
-//                    BigInteger[] roomParameters = DiffieHellman.generateParameters(300);
-//
-//                    byte[] p = roomParameters[0].toByteArray();
-//                    byte[] g = roomParameters[1].toByteArray();
-//
-//                    roomRepository.save(
-//                            RoomInfo.builder()
-//                                    .roomId(roomId)
-//                                    .p(p)
-//                                    .g(g)
-//                                    .build()
-//                    );
-//                }
-//
-//                roomConnections.put(roomId, Pair.of(clientId, null));
-//                clientRepository.addRoom(clientId, roomId);
-//
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
 
     public synchronized boolean connectToRoom(long clientId, long roomId) {
         Optional<ClientInfo> clientInfoOptional = clientRepository.findById(clientId);
@@ -166,38 +119,6 @@ public class ChatServer {
         );
     }
 
-//    public synchronized void disconnectFromRoom(long clientId, long roomId) {
-//        if (roomConnections.containsKey(roomId)) {
-//            log.info("trying to disconnect");
-//            Pair<Long, Long> room = roomConnections.get(roomId);
-//
-//            if (room.getLeft() != null && room.getLeft() == clientId) {
-//                roomConnections.put(roomId, Pair.of(null, room.getRight()));
-//            } else if (room.getRight() != null && room.getRight() == clientId) {
-//                roomConnections.put(roomId, Pair.of(room.getLeft(), null));
-//            } else {
-//                return;
-//            }
-//
-//            Pair<Long, Long> updatedRoom = roomConnections.get(roomId);
-//
-//            if (updatedRoom.getLeft() == null && updatedRoom.getRight() == null) {
-//                log.info("remove roomId");
-//                roomConnections.remove(roomId);
-//            }
-//
-//            String url = "room/" + clientId + "/" + roomId;
-//
-//            UI ui = openWindows.get(url);
-//
-//            if (ui != null) {
-//                ui.getPage().executeJs("window.close()");
-//                removeWindow(url);
-//            }
-//
-//            clientRepository.removeRoom(clientId, roomId);
-//        }
-//    }
 public synchronized void disconnectFromRoom(long clientId, long roomId) {
     if (!roomConnections.containsKey(roomId)) {
         return;
